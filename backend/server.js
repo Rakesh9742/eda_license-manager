@@ -86,6 +86,17 @@ app.get('/api/check-changes', (req, res) => {
   }
 });
 
+// Refresh license data (re-check file state; client should refetch GET /api/licenses)
+app.post('/api/licenses/refresh', (req, res) => {
+  try {
+    const hasChanges = parser.checkForFileChanges();
+    res.json({ success: true, hasChanges });
+  } catch (error) {
+    console.error('Error refreshing license data:', error);
+    res.status(500).json({ success: false, error: 'Failed to refresh license data' });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'EDA License Manager API is running' });
@@ -100,5 +111,6 @@ app.listen(port, () => {
   console.log(`  GET  /api/licenses?tool=<tool> - Get license data with optional tool filter`);
   console.log(`  GET  /api/licenses/<tool> - Get license data for specific tool`);
   console.log(`  GET  /api/check-changes - Check for file changes in incoming folder`);
+  console.log(`  POST /api/licenses/refresh - Refresh license data (re-check files)`);
   console.log(`\nMonitoring incoming/ folder for license files...`);
 });

@@ -80,6 +80,36 @@ eda_license_manager/
    ```
    The React application will start on http://localhost:3000
 
+### Running with PM2 (production server)
+
+From the **project root** (folder that contains `backend/` and `frontend/`):
+
+1. **One-time: build the frontend**
+   ```bash
+   cd frontend && npm run build && cd ..
+   ```
+
+2. **Start both backend and frontend with PM2**
+   ```bash
+   pm2 start ecosystem.config.cjs
+   ```
+
+   - Backend: **http://localhost:3001**
+   - Frontend: **http://localhost:3000**
+
+**Useful PM2 commands:**
+```bash
+pm2 list              # list apps
+pm2 logs              # view logs (both apps)
+pm2 logs eda-backend  # backend logs only
+pm2 logs eda-frontend # frontend logs only
+pm2 restart all       # restart both
+pm2 stop all          # stop both
+pm2 delete all        # remove from PM2
+```
+
+To use a different port for the frontend (e.g. 3002), edit `ecosystem.config.cjs` and change the frontend app’s args to `['serve', '-s', 'build', '-l', '3002']`.
+
 ## Usage
 
 1. **View License Data**: The main dashboard displays license information in a table format
